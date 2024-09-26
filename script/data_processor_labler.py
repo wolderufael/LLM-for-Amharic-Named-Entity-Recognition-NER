@@ -13,7 +13,7 @@ class Processor:
         df.loc[:,'Message'] = df['Message'].apply(lambda x: emoji.replace_emoji(x, replace='') if isinstance(x, str) else x)
         return df
     
-    def filter_amharic(df):
+    def filter_amharic(self,df):
         # Define Amharic character range
         amharic_pattern = re.compile(r'[\u1200-\u137F]')
 
