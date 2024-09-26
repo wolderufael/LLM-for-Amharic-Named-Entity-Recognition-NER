@@ -1,0 +1,5 @@
+{
+  "python.jediEnabled": false,
+  "python.languageServer": "Pylance",
+  "editor.suggest.showWords": true
+}
