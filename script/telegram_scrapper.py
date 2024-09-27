@@ -37,23 +37,17 @@ class Scrapper:
             os.makedirs(media_dir, exist_ok=True)
 
             # Open the CSV file and prepare the writer
-            with open('telegram_data.csv', 'w', newline='', encoding='utf-8') as file:
+            with open('data/adamagebeya_telegram_data.csv', 'w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(['Channel Title', 'Channel Username', 'ID', 'Message', 'Date', 'Media Path'])  # Include channel title in the header
 
                 # List of channels to scrape
                 channels = [
-                    '@Shageronlinestore',  # Existing channel
-                        # You can add more channels here
+                    '@gebeyaadama',  # Telegram channel
                 ]
 
-                # Iterate over channels and scrape data into the single CSV file
+                # scrape data into the a CSV file
                 for channel in channels:
                     await self.scrape_channel(client, channel, writer, media_dir)
                     print(f"Scraped data from {channel}")
 
-# Run the scraping process
-if __name__ == "__main__":
-    scrapper = Scrapper()
-    import asyncio
-    asyncio.run(scrapper.main())

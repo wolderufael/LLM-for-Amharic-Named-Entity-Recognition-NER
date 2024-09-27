@@ -188,5 +188,18 @@ class Processor:
                 f.write('\n')  # This adds an empty line after every message
                 
         print(f"Data has been saved to {output_file}")
+        
+        
+    def read_until_blank(self,file_path):
+        lines_until_blank = []  # Initialize a list to hold the lines
+
+        # Open the file and read until a blank line
+        with open(file_path, 'r', encoding='utf-8') as file:
+            for line in file:
+                if line.strip() == "":  # Check for a blank line
+                    break  # Stop reading if a blank line is found
+                lines_until_blank.append(line.strip())  # Add non-blank lines to the list
+
+        return lines_until_blank  # Return the list of lines read
 
 
