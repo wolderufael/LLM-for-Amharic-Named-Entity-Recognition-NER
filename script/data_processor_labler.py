@@ -8,12 +8,6 @@ class Processor:
     def drop_missing_messsage(self,df):
         df.dropna(subset='Message',inplace=True)
         return df
-    # def remove_emojis_from_message(self,df):
-
-    #     df.loc[:,'Message'] = df['Message'].apply(lambda x: emoji.replace_emoji(x, replace='') if isinstance(x, str) else x)
-    #     # df['Message'] = df['Message'].apply(lambda x: ' '.join(x.split()) if isinstance(x, str) else x)
-    #     # df = df[df['Message'].str.contains('ዋጋ', na=False)] # drop the row if it doesn't contain 'ዋጋ' this removes other posts in the channel that are not intended for trading. eg wishing a happy holiday posts
-    #     return df
     
     def clean_message(self,df):
         def clean_txt(text):
@@ -57,9 +51,8 @@ class Processor:
         tokens = message.split('\n')
         filtered_tokens = list(filter(lambda token: token.strip() != '', tokens))
         labels = []
-        loc_flag = False  # To flag location entity start
-        product_flag = False  # To flag that product labeling is in progress
-        
+        loc_flag = False  
+        product_flag = False  
         
         for i, token in enumerate(filtered_tokens):
             # function to check telegram link
@@ -70,42 +63,41 @@ class Processor:
                 # Iterate through each part and check if it matches the regex pattern
                 for part in parts:
                     if re.match(regEx, part):
-                        return True  # If any part matches, return True
+                        return True  
         
-                return False  # If no part matches, return False
+                return False  
             def contains_phone_number(token):
             # Use the search function to check if the pattern is in the token
                 if phone_pattern.search(token):
-                    return True  # Return True if a match is found
-                return False  # Return False if no match is found
+                    return True  
+                return False  
             
             def contains_price(token):
             # Use the search function to check if the pattern is in the token
                 if price_pattern.search(token):
-                    return True  # Return True if a match is found
-                return False  # Return False if no match is found
+                    return True  
+                return False  
             
             # Check if the token is a beginning token (first token) or contains specific keywords
             if i == 0 and all(city not in token for city in ['አዳማ', 'አዲስ አበባ']) and not contains_phone_number(token):
-                labels.append('B-Product')  # Mark the first token or specified keywords as B-Product
-                product_flag = True # Set product flag
+                labels.append('B-Product')  
+                product_flag = True 
                 continue
                 
             if (i==1 and not product_flag and not contains_phone_number(token)) or (product_flag and token.isascii()):
                 labels.append('B-Product')
-                # product_flag=False
                 continue
             # Check for phone number and label as 'O'
             if contains_phone_number(token) :
                 labels.append('O')
-                product_flag = False  # Reset product flag after encountering these
+                product_flag = False  
                 continue
             
             # Check for price pattern and label as 'B-PRICE'
             if contains_price(token) or 'ዋጋ' in token:
                 labels.append('B-PRICE')
-                product_flag = False  # Reset product flag
-                loc_flag = False  # Reset location flag
+                product_flag = False  
+                loc_flag = False 
                 continue
             if any(keyword in token for keyword in ['አድራሻ', 'አድራሻችን']):
                 if  any(keyword in token for keyword in ['አዲስ አበባ','አዳማ','ሞል','ሱ.ቁ']):
@@ -116,7 +108,6 @@ class Processor:
                     labels.append('O')
                     continue
             if  any(keyword in token for keyword in ['አዲስ አበባ','አዳማ','ህንፃ','ሞል','ሱ.ቁ']):
-                # loc_flag=True
                 labels.append('B-LOC')
                 continue
             # If token is part of a location entity
@@ -162,8 +153,6 @@ class Processor:
                 # For 'O' or other labels, apply 'O' to all words
                 for word in words:
                     conll_output.append(f"{word} O")
-
-        # Print the results
     
         return conll_output
 
@@ -182,24 +171,24 @@ class Processor:
                 
                 # Write each line of the CoNLL formatted output to the file
                 for line in conll_formatted_output:
-                    f.write(line + '\n')  # Write the line followed by a newline
+                    f.write(line + '\n')  
                 
                 # Add an empty line after each message's output
-                f.write('\n')  # This adds an empty line after every message
+                f.write('\n')  
                 
         print(f"Data has been saved to {output_file}")
         
         
     def read_until_blank(self,file_path):
-        lines_until_blank = []  # Initialize a list to hold the lines
+        lines_until_blank = []  
 
         # Open the file and read until a blank line
         with open(file_path, 'r', encoding='utf-8') as file:
             for line in file:
-                if line.strip() == "":  # Check for a blank line
-                    break  # Stop reading if a blank line is found
-                lines_until_blank.append(line.strip())  # Add non-blank lines to the list
+                if line.strip() == "":  
+                    break  
+                lines_until_blank.append(line.strip())  
 
-        return lines_until_blank  # Return the list of lines read
+        return lines_until_blank  
 
 
