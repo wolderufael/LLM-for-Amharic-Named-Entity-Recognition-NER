@@ -11,7 +11,6 @@ phone = os.getenv('phone')
 
 
 class Scrapper:
-
     # Function to scrape data from a single channel
     async def scrape_channel(self,client, channel_username, writer, media_dir):
         entity = await client.get_entity(channel_username)
