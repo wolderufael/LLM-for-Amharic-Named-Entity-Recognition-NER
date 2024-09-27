@@ -168,19 +168,25 @@ class Processor:
         return conll_output
 
 
-    def label_dataset(self,df):
+    def label_and_save_dataset(self, df, output_file):
         labeled_messages = []
         
-        # Iterate through each message in the dataset
-        for message in df['Message']:
-            # Label each message
-            labeled_message = self.label_message(message)
-            conll_formatted_output=self.convert_to_conll_format(labeled_message)
-            labeled_messages.append(conll_formatted_output)
-            for line in conll_formatted_output:
-                print(line)
+        # Open the file in write mode
+        with open(f'data/{output_file}', 'w', encoding='utf-8') as f:
+            # Iterate through each message in the dataset
+            for message in df['Message']:
+                # Label each message
+                labeled_message = self.label_message(message)
+                conll_formatted_output = self.convert_to_conll_format(labeled_message)
+                labeled_messages.append(conll_formatted_output)
                 
-            print() #an empty new line after every message 
-        
-        # return labeled_messages
+                # Write each line of the CoNLL formatted output to the file
+                for line in conll_formatted_output:
+                    f.write(line + '\n')  # Write the line followed by a newline
+                
+                # Add an empty line after each message's output
+                f.write('\n')  # This adds an empty line after every message
+                
+        print(f"Data has been saved to {output_file}")
+
 
