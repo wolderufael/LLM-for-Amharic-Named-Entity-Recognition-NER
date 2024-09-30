@@ -42,7 +42,7 @@ class Processor:
 
         return df_filtered
 
-    def label_message(self,message):
+    def tokenize_label_message(self,message):
         # Define price and phone number patterns
         price_pattern = re.compile(r'\b(?:ዋጋ[-\s]*)?(\d{3,5})\s?ብር\b|\b(\d{3,5})\s?ብር\b')    
         phone_pattern = re.compile(r'(\+2519\d{8}|\b09\d{2}[- ]?\d{2}[- ]?\d{2}[- ]?\d{2}\b)')
@@ -157,7 +157,7 @@ class Processor:
         return conll_output
 
 
-    def label_and_save_dataset(self, df, output_file):
+    def tokenize_label_and_save_dataset(self, df, output_file):
         labeled_messages = []
         
         # Open the file in write mode
@@ -165,7 +165,7 @@ class Processor:
             # Iterate through each message in the dataset
             for message in df['Message']:
                 # Label each message
-                labeled_message = self.label_message(message)
+                labeled_message = self.tokenize_label_message(message)
                 conll_formatted_output = self.convert_to_conll_format(labeled_message)
                 labeled_messages.append(conll_formatted_output)
                 
