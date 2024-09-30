@@ -13,7 +13,6 @@ This repository contains scripts and data related to the fine-tuning of a Langua
 ├── data<br>
 │   ├── adamagebeya_telegram_data.csv <br>
 │   ├── conll_format_data.txt <br>
-│   └── telegram_data.csv<br>
 ├── notebook<br>
 │   ├── data_processing_labeling.ipynb<br>
 │   └── scrap_label_tokenize.ipynb<br>
@@ -43,7 +42,7 @@ The following is an overview of the file structure for the project:
 
 ### 4. `script/`
 - Python scripts:
-  - **data_processor_labler.py**: Script to label and process the data for NER training.
+  - **data_processor_labler.py**: Script to tokenize, label and process the data for NER training.
   - **telegram_scrapper.py**: Script for scraping Telegram channels to gather data for the project.
 
 ### 5. `.env`
