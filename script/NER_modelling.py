@@ -1,3 +1,4 @@
+import os
 from datasets import Dataset
 from transformers import TrainingArguments
 from transformers import AutoModelForTokenClassification, Trainer
@@ -41,6 +42,18 @@ class Modelling:
         dataset = Dataset.from_dict(data)
         
         return dataset   
+    
+    def merge_conll_files(self,input_files, output_file):
+        with open(output_file, 'w', encoding='utf-8') as outfile:
+            for file_path in input_files:
+                if os.path.exists(file_path):
+                    with open(file_path, 'r', encoding='utf-8') as infile:
+                        for line in infile:
+                            outfile.write(line)
+                        outfile.write("\n")  # Add a newline to separate sentences from different files
+                else:
+                    print(f"Warning: The file {file_path} does not exist and will be skipped.")
+    
     
     def tokenize_and_align_labels(self,dataset, tokenizer, label_all_tokens=False):
         def tokenize_and_align(examples):
